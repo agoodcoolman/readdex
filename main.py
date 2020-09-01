@@ -9,12 +9,15 @@ def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print("Hi, {0}".format(name))  # Press Ctrl+F8 to toggle the breakpoint.
     #  read unsigned leb 128
-def getleb128string(f, addressoff):
+def getleb128string(f, addressoff, size):
+
     f.seek(addressoff + 1)
-    first = int(str(binascii.b2a_hex(f.read(1))), 16)
-    print 'first value=', hex(first), first > 0x7f
-    if first != 0:
-        pass
+    print 'mutf8zise', bytearray(f.read(size))
+    # first = str(binascii.b2a_hex(bytearray(f.read(size))))
+    # print 'first value=', first
+    # print str(first)
+
+
     # if first > 0x7f:
     #     first = (first & 0x7f) << 7
     #     f.seek(addressoff + 2)
@@ -33,13 +36,13 @@ def getleb128string(f, addressoff):
     #                 five = f.read(2)
     #                 first = (five & 0x7f) | (first << 28)
 
-    print "first result", first, str(first)
+    # print "first result", first, str(first)first
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
-    f = open(".\\Hello.dex", 'rb', True)
+    f = open("./Hello.dex", 'rb', True)
 
     f.seek(0x38)
     stringidsSize = f.read(4)
@@ -72,7 +75,7 @@ if __name__ == '__main__':
         mutf8zise = f.read(1)
         print 'size=', binascii.b2a_hex(mutf8zise), 'off=', stringDataOffs[readIndex]
 
-        getleb128string(f, stringDataOffs[readIndex])
+        getleb128string(f, stringDataOffs[readIndex], int(binascii.b2a_hex(mutf8zise), 16))
 
 
 
